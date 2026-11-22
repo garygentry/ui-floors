@@ -44,11 +44,13 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
-      # Tag, package.json, plugin manifests and STANDARD.md agree; CHANGELOG has a dated section. Writes dist/NOTES.md.
+      # Tag, package.json, plugin manifests and STANDARD.md agree; CHANGELOG has a dated section; package.json's name and
+      # repository.url match what the trusted publisher expects. Writes dist/NOTES.md.
       - name: Preflight
         id: preflight
         env:
           TAG: ${{ github.ref_name }}
+          REPOSITORY_URL: git+https://github.com/${{ github.repository }}.git
         run: bun scripts/release/preflight.ts
 
       - name: Assert no existing release

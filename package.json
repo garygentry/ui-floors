@@ -35,8 +35,7 @@
     "NOTICE"
   ],
   "engines": {
-    "bun": ">=1.4",
-    "node": ">=22"
+    "bun": ">=1.4"
   },
   "scripts": {
     "test": "bun test",

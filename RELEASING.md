@@ -8,7 +8,10 @@ approval per release gates the irreversible steps. No npm token exists anywhere.
 In this order:
 
 1. **Tag ruleset `release-tags`** (Settings → Rules → Rulesets → New tag ruleset): active, target `v*`, restrict
-   creations, bypass list Repository admin only.
+   creations, bypass list Repository admin only. This does **not** bind the agent: its token (gnet-lg-dev) acts as
+   `garygentry`, an admin on the bypass list, so it can push `v*` tags, and verify's actor check passes for the same
+   reason. The ruleset and the actor check stop outside contributors only. The `release` environment's approval is
+   the real gate.
 2. **Environment `release`** (Settings → Environments): required reviewer `garygentry`; "Prevent self-review" off
    (agent-pushed tags run as the owner and could never be approved otherwise); admin bypass disallowed; deployment
    branches and tags limited to `v*` tags.
