@@ -1,0 +1,13 @@
+{
+  "name": "ui-floors",
+  "description": "Checks and procedures that bring a web UI up to a sound baseline.",
+  "owner": { "name": "Gary Gentry" },
+  "plugins": [
+    {
+      "name": "ui-floors",
+      "source": ".",
+      "description": "Bring any web UI up to a sound baseline: run the ui-floors checks, fix every floor, report the opinions, read every screenshot, and confirm each fix.",
+      "version": "0.1.0"
+    }
+  ]
+}

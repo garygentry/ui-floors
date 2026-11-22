@@ -63,7 +63,9 @@ export function collectFiles(opts: LintOptions, missing: string[] = []): File[] 
     const ext = extname(p);
     const kind = CSS_EXT.has(ext) ? "css" : SOURCE_EXT.has(ext) ? "source" : HTML_EXT.has(ext) ? "html" : null;
     if (!kind) continue;
-    files.push({ path: relative(opts.root, p).split(sep).join("/"), text: readFileSync(p, "utf8"), kind });
+    // Relative to the config's folder; a file outside it (a config kept outside the repo) keeps its absolute path.
+    const r = relative(opts.root, p);
+    files.push({ path: (r.startsWith("..") ? p : r).split(sep).join("/"), text: readFileSync(p, "utf8"), kind });
   }
   return files;
 }

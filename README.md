@@ -18,6 +18,19 @@ bunx playwright install chromium
 
 Playwright is a peer dependency, so the app's own pinned Playwright and its Chromium are used. If an app pins Playwright, install Chromium with that version: `./node_modules/.bin/playwright install chromium`.
 
+## The Claude Code plugin
+
+The repo is also a Claude Code plugin with one skill, `ui-floors:ui`. Its procedures set up the checks (committed, or
+ad hoc outside a repo you shouldn't change), run a baseline pass (fix every floor, report the opinions, read every
+screenshot, confirm each fix), run the sweep, and review a UI with a hand checklist. It doesn't include impeccable, a
+separate design critique skill; the review procedure uses it if you've installed it.
+
+```
+/plugin install ui-floors --marketplace garygentry/ui-floors
+```
+
+Then ask for what you want: "bring this UI up to a solid baseline", "sweep every page and fix what you find".
+
 ## Commands
 
 ```sh
@@ -121,7 +134,7 @@ The names from before the package was public (`ui-checks.json`, `data-ui-checks-
 
 ## Where this comes from
 
-The code is original. It started as Python screenshot scripts written for a design update of one internal app, and grew into this package over a few more apps. The false-positive rules come from those apps.
+The code and the procedures are original. It started as Python screenshot scripts written for a design update of one internal app, and grew into this package over a few more apps. The false-positive rules come from those apps.
 
 The rules aren't all ours, and the standard says which are:
 

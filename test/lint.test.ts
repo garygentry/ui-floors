@@ -11,6 +11,17 @@ const run = (dir: string, stack: "react-tailwind" | "css" = "react-tailwind") =>
 const live = (fs: ReturnType<typeof run>["findings"]) => fs.filter((f) => !f.ignored).map((f) => `${f.check} ${f.where ?? ""}`.trim()).sort();
 
 describe("lint", () => {
+  test("a file outside the config's folder is named by its absolute path", () => {
+    const outside = mkdtempSync(join(tmpdir(), "ui-floors-outside-"));
+    try {
+      const src = join(FIXTURES, "lint", "defects", "src");
+      const r = lint({ root: outside, include: [src], exclude: [], tokenFiles: [], stack: "react-tailwind" });
+      expect(r.findings.length).toBeGreaterThan(0);
+      expect(r.findings.filter((f) => f.where).every((f) => f.where!.startsWith(src))).toBe(true);
+    } finally {
+      rmSync(outside, { recursive: true, force: true });
+    }
+  });
   test("the clean fixture has no findings", () => {
     const r = run("clean");
     expect(r.files).toBe(4);

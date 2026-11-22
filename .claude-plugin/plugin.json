@@ -1,0 +1,9 @@
+{
+  "name": "ui-floors",
+  "version": "0.1.0",
+  "description": "Bring any web UI up to a sound baseline: run the ui-floors checks, fix every floor, report the opinions, read every screenshot, and confirm each fix.",
+  "author": { "name": "Gary Gentry" },
+  "license": "Apache-2.0",
+  "repository": "https://github.com/garygentry/ui-floors",
+  "keywords": ["ui", "accessibility", "wcag", "playwright", "screenshots", "review"]
+}
