@@ -5,10 +5,22 @@
   "description": "Checks that bring any web UI up to a sound baseline: a screenshot sweep with layout checks, contrast, lint rules and a JS budget. Floors always hold; opinions are configurable.",
   "license": "Apache-2.0",
   "author": "Gary Gentry",
-  "repository": { "type": "git", "url": "git+https://github.com/garygentry/ui-floors.git" },
-  "keywords": ["ui", "accessibility", "wcag", "contrast", "playwright", "screenshots", "lint", "design-system"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garygentry/ui-floors.git"
+  },
+  "keywords": [
+    "ui",
+    "accessibility",
+    "wcag",
+    "contrast",
+    "playwright",
+    "screenshots",
+    "lint",
+    "design-system"
+  ],
   "bin": {
-    "ui-floors": "./src/cli.ts"
+    "ui-floors": "src/cli.ts"
   },
   "exports": {
     ".": {
