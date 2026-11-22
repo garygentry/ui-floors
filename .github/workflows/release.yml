@@ -1,0 +1,194 @@
+name: Release
+
+# The ONLY workflow that publishes (estate ADR 0046 Amendment 4). npm Trusted Publishing trusts it by filename and
+# environment, so don't rename it. Modelled on garygentry/rauf's release.yml. Two jobs:
+#   verify:  no credentials. Preflight, quality gate, pack, and a summary for the approver.
+#   publish: `environment: release`, one human approval. Attest, GitHub Release, npm publish.
+# The only trigger is a v* tag push: never publish from main. A publish that fails part-way is retried with
+# "Re-run failed jobs"; each publish step skips work that already landed.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read # per-job grants below; only `publish` can write or mint an OIDC token
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  PACKAGE: "@garygentry/ui-floors"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.preflight.outputs.version }}
+      tag: ${{ steps.preflight.outputs.tag }}
+      is_prerelease: ${{ steps.preflight.outputs.is_prerelease }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # tags and history for the diff since the last release
+
+      # Defense in depth; the primary layer is the release-tags ruleset (only the owner creates v* tags).
+      - name: Authorize actor
+        if: github.actor != github.repository_owner
+        run: |
+          echo "::error::actor ${{ github.actor }} is not the repository owner" >&2
+          exit 1
+
+      - uses: oven-sh/setup-bun@v2
+
+      # Tag, package.json, plugin manifests and STANDARD.md agree; CHANGELOG has a dated section. Writes dist/NOTES.md.
+      - name: Preflight
+        id: preflight
+        env:
+          TAG: ${{ github.ref_name }}
+        run: bun scripts/release/preflight.ts
+
+      - name: Assert no existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.preflight.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::error::release $TAG already exists; refusing to overwrite" >&2
+            exit 1
+          fi
+
+      - name: Assert version not on npm
+        env:
+          VERSION: ${{ steps.preflight.outputs.version }}
+        run: |
+          if [ -n "$(npm view "$PACKAGE@$VERSION" version 2>/dev/null)" ]; then
+            echo "::error::$PACKAGE@$VERSION is already on npm; refusing to release" >&2
+            exit 1
+          fi
+
+      - uses: ./.github/actions/quality-gate
+
+      # The exact bytes the publish job ships.
+      - name: Pack
+        run: |
+          npm pack --pack-destination dist
+          ls dist/*.tgz
+          (cd dist && sha256sum *.tgz > SHA256SUMS)
+
+      - name: Release summary
+        env:
+          TAG: ${{ steps.preflight.outputs.tag }}
+          VERSION: ${{ steps.preflight.outputs.version }}
+          IS_PRERELEASE: ${{ steps.preflight.outputs.is_prerelease }}
+        run: |
+          prev="$(git describe --tags --abbrev=0 --match 'v*' "$TAG^" 2>/dev/null || true)"
+          {
+            echo "## Release $TAG: awaiting approval"
+            echo ""
+            echo "- **Version:** \`$VERSION\` (prerelease: $IS_PRERELEASE)"
+            echo "- **Ships:** npm \`$PACKAGE@$VERSION\` (dist-tag \`$( [ "$IS_PRERELEASE" = "true" ] && echo next || echo latest )\`, provenance) and GitHub Release \`$TAG\` (the tarball and SHA256SUMS, attested)"
+            echo "- **Previous tag:** ${prev:-none}"
+            echo ""
+            if [ -z "$prev" ] || [ -n "$(git diff --name-only "$prev" "$TAG" -- .github/)" ]; then
+              echo "> [!CAUTION]"
+              echo "> **\`.github/\` changed since ${prev:-the start}.** Review the workflow diff before approving:"
+              echo ">"
+              if [ -n "$prev" ]; then git diff --stat "$prev" "$TAG" -- .github/ | sed 's/^/> /'; else git ls-files .github | sed 's/^/> /'; fi
+              echo ""
+            fi
+            echo "### Package contents"
+            echo ""
+            echo '```'
+            tar -tzf dist/*.tgz
+            echo '```'
+            echo ""
+            echo "### Changelog"
+            echo ""
+            cat dist/NOTES.md
+            echo ""
+            if [ -n "$prev" ]; then
+              echo "### \`git diff --stat $prev..$TAG\`"
+              echo ""
+              echo '```'
+              git diff --stat "$prev" "$TAG"
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-dist
+          path: |
+            dist/*.tgz
+            dist/SHA256SUMS
+            dist/NOTES.md
+          if-no-files-found: error
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release # one human approval; deployments limited to v* tags
+    permissions:
+      contents: write # gh release create
+      id-token: write # npm trusted publishing and provenance, attestation signing (OIDC)
+      attestations: write # actions/attest-build-provenance
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.verify.outputs.tag }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-dist
+          path: dist
+
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: |
+            dist/*.tgz
+            dist/SHA256SUMS
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.verify.outputs.tag }}
+          IS_PRERELEASE: ${{ needs.verify.outputs.is_prerelease }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::warning::release $TAG already exists (job re-run); not recreating"
+            exit 0
+          fi
+          gh release create "$TAG" dist/*.tgz dist/SHA256SUMS \
+            --title "$TAG" --notes-file dist/NOTES.md --verify-tag \
+            $( [ "$IS_PRERELEASE" = "true" ] && echo --prerelease || echo --latest )
+
+      # Node 24 bundles npm >= 11.6 (trusted publishing needs >= 11.5.1). Don't upgrade npm in place: that prunes its
+      # bundled sigstore and breaks --provenance (seen on rauf v0.12.0).
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: "https://registry.npmjs.org"
+
+      # OIDC trusted publishing: no token, anywhere.
+      - name: npm publish
+        env:
+          VERSION: ${{ needs.verify.outputs.version }}
+          DIST_TAG: ${{ needs.verify.outputs.is_prerelease == 'true' && 'next' || 'latest' }}
+        run: |
+          if [ -n "$(npm view "$PACKAGE@$VERSION" version 2>/dev/null)" ]; then
+            echo "::warning::$PACKAGE@$VERSION already on npm (job re-run); not republishing"
+            exit 0
+          fi
+          npm publish ./dist/*.tgz --access public --provenance --tag "$DIST_TAG"
+
+      - name: Summary
+        env:
+          TAG: ${{ needs.verify.outputs.tag }}
+          VERSION: ${{ needs.verify.outputs.version }}
+        run: |
+          echo "### Released $TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://github.com/${{ github.repository }}/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://www.npmjs.com/package/$PACKAGE/v/$VERSION" >> "$GITHUB_STEP_SUMMARY"

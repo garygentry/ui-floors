@@ -12,7 +12,7 @@ It runs on Bun. The package ships TypeScript source, which Node won't run from `
 ## Install
 
 ```sh
-bun add -d ui-floors playwright
+bun add -d @garygentry/ui-floors playwright
 bunx playwright install chromium
 ```
 

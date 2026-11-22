@@ -1,0 +1,15 @@
+name: Quality gate
+description: Install, then typecheck and run every test, the browser tests included. Shared by ci.yml and release.yml so the two can't drift.
+runs:
+  using: composite
+  steps:
+    - uses: oven-sh/setup-bun@v2 # reads .bun-version
+    - name: Install dependencies
+      shell: bash
+      run: bun install --frozen-lockfile
+    - name: Install Chromium (the repo's pinned Playwright)
+      shell: bash
+      run: ./node_modules/.bin/playwright install --with-deps chromium
+    - name: Typecheck and test
+      shell: bash
+      run: bun run check
