@@ -1,0 +1,6 @@
+/* Theme presets are variants: their tokens must not overwrite the base light or dark theme. Passes. */
+:root { --background: #ffffff; --foreground: #111111; --muted-foreground: #3f3f3f; }
+.dark { --background: #111111; --foreground: #f5f5f5; --muted-foreground: #c8c8c8; }
+[data-theme-preset="pale"] { --muted-foreground: #dddddd; }
+.dark[data-theme-preset="pale"] { --muted-foreground: #222222; }
+@media (width >= 48rem) { :root { --gutter: 24px; } }

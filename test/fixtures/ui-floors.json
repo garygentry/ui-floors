@@ -1,0 +1,75 @@
+{
+  "stack": "react-tailwind",
+  "pages": [
+    {
+      "path": "/clean.html",
+      "ready": "main h1",
+      "name": "clean"
+    },
+    {
+      "path": "/falsepos.html",
+      "ready": "main h1",
+      "name": "falsepos"
+    },
+    {
+      "path": "/hscroll.html",
+      "ready": "main h1",
+      "name": "hscroll"
+    },
+    {
+      "path": "/numeric.html",
+      "ready": "main h1",
+      "name": "numeric"
+    },
+    {
+      "path": "/focus.html",
+      "ready": "main h1",
+      "name": "focus"
+    }
+  ],
+  "out": "../../.scratch/shots",
+  "timeoutMs": 5000,
+  "rules": {
+    "body-size": "error",
+    "line-length": "error",
+    "numeric-columns": "error",
+    "hidden-columns": "error",
+    "touch-action": "error",
+    "search-input": "error",
+    "theme-color": "error",
+    "dark-theme": "error",
+    "literal-colour": "error",
+    "transition-all": "error",
+    "break-all": "error",
+    "remote-font": "error",
+    "font-fallback": "error",
+    "budget": "error"
+  },
+  "confirm": [
+    {
+      "name": "target-390",
+      "path": "/confirm.html",
+      "width": 390,
+      "selector": "#target"
+    }
+  ],
+  "contrast": {
+    "files": [
+      "tokens/good.css"
+    ]
+  },
+  "lint": {
+    "include": [
+      "lint/clean/src",
+      "lint/clean/index.html"
+    ],
+    "tokenFiles": [
+      "lint/clean/src/theme.css"
+    ]
+  },
+  "budget": {
+    "dist": "dist",
+    "entry": "index.html",
+    "limitBytes": 250000
+  }
+}

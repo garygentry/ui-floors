@@ -1,0 +1,13 @@
+/* Light passes; dark muted text fails the 4.5:1 floor. Uses the media-query form of dark. */
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+  --muted-foreground: #374151;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111827;
+    --foreground: #f9fafb;
+    --muted-foreground: #4b5563;
+  }
+}

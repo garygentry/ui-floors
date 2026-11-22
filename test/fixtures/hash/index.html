@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Hash routes</title></head>
+<body>
+<main></main>
+<script>
+  // Reads its route once, at load, as many single-page apps do; it ignores later hash changes.
+  const route = location.hash === '#b' ? 'b' : 'a'
+  document.querySelector('main').innerHTML = '<h1 id="' + route + '">Page ' + route + '</h1>'
+</script>
+</body>
+</html>

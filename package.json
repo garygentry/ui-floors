@@ -1,0 +1,43 @@
+{
+  "name": "ui-floors",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Checks that bring any web UI up to a sound baseline: a screenshot sweep with layout checks, contrast, lint rules and a JS budget. Floors always hold; opinions are configurable.",
+  "license": "Apache-2.0",
+  "author": "Gary Gentry",
+  "repository": { "type": "git", "url": "git+https://github.com/garygentry/ui-floors.git" },
+  "keywords": ["ui", "accessibility", "wcag", "contrast", "playwright", "screenshots", "lint", "design-system"],
+  "bin": {
+    "ui-floors": "./src/cli.ts"
+  },
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "files": [
+    "src",
+    "types",
+    "STANDARD.md",
+    "NOTICE"
+  ],
+  "engines": {
+    "bun": ">=1.4",
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc -p .",
+    "check": "bun run typecheck && bun test",
+    "types": "bun scripts/build-types.ts"
+  },
+  "peerDependencies": {
+    "playwright": ">=1.55"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.5",
+    "typescript": "^7.0.2",
+    "playwright": "^1.65.1"
+  }
+}

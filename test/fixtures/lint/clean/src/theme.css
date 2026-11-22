@@ -1,0 +1,4 @@
+/* Token file: literal colours belong here. */
+:root { --background: oklch(0.98 0 0); --foreground: #1e293b; }
+.dark { --background: oklch(0.18 0.02 258); }
+@font-face { font-family: "Face"; src: url("./face.woff2") format("woff2"); }

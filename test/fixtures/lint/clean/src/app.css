@@ -1,0 +1,4 @@
+#main { color: var(--foreground); background: var(--background); }
+body { font-family: "Face", ui-sans-serif, system-ui, sans-serif; }
+.button { transition: color 150ms, background-color 150ms; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

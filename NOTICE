@@ -1,0 +1,57 @@
+ui-floors
+Copyright 2026 Gary Gentry
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product's code is original. Several of the rules it checks come from other
+people's work, credited below and next to each rule in STANDARD.md. No third-party
+code is included.
+
+------------------------------------------------------------------------------
+Web Content Accessibility Guidelines (WCAG) 2.2
+https://www.w3.org/TR/WCAG22/
+W3C Recommendation. Copyright World Wide Web Consortium.
+
+The contrast ratio formula and the 4.5:1 text threshold (1.4.3), the target size
+minimum and its spacing exception (2.5.8), visible focus (2.4.7), reflow without
+horizontal scrolling (1.4.10) and motion from interactions (2.3.3) are WCAG's. The
+checks implement them; no WCAG text is reproduced.
+
+------------------------------------------------------------------------------
+Web Interface Guidelines, Vercel Labs
+https://github.com/vercel-labs/web-interface-guidelines
+MIT License. Copyright (c) 2025 Vercel Labs.
+
+These checks enforce rules taken from the guidelines: no `transition: all`,
+`touch-action: manipulation` on controls, `autocomplete="off"` and
+`spellcheck="false"` on search inputs, a `theme-color` meta that matches the page,
+and tabular figures in number columns. The hand-review checklist in the plugin's
+reference folder is a paraphrase of the guidelines, sorted by what the checks cover.
+It is distributed under the MIT licence above, whose text follows:
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+------------------------------------------------------------------------------
+impeccable, Paul Bakaus
+https://github.com/pbakaus/impeccable
+Apache License 2.0.
+
+Not included. The plugin's review procedure can call a copy the user installs
+from upstream. Without it, the procedure uses the checks and a reading of the
+screenshots.

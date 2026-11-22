@@ -1,0 +1,2 @@
+/* No dark theme at all. */
+:root { --background: #ffffff; --foreground: #111111; }

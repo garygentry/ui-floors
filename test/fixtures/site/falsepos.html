@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Known false positives</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a">
+<link rel="stylesheet" href="/base.css">
+<style>
+.scroller { overflow-x: auto; max-width: 300px; }
+.scroller table { width: 900px; }
+.scroller .pin { position: sticky; left: 0; background: var(--bg); min-width: 140px; }
+.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; width: 200px; }
+.ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 120px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.stack { position: relative; }
+.badge { position: absolute; top: 0; left: 0; }
+.ghost { visibility: hidden; margin-top: -1.55em; }
+.faded { opacity: 0; margin-top: -1.55em; }
+.deco { margin-top: -1.55em; }
+.stretch { position: relative; display: inline-block; padding: 12px; outline: none; }
+.stretch::after { content: ""; position: absolute; inset: 0; border-radius: 4px; }
+.stretch:focus-visible::after { box-shadow: 0 0 0 3px currentColor; }
+.stretchli { position: relative; list-style: none; padding: 16px; max-width: 300px; }
+.stretchli a { outline: none; }
+.stretchli a::after { content: ""; position: absolute; inset: 0; }
+.stretchli a:focus-visible::after { box-shadow: inset 0 0 0 3px currentColor; }
+.childring { display: inline-block; padding: 12px; outline: none; }
+.childring:focus-visible > span { box-shadow: 0 0 0 3px currentColor; }
+.marks rect { outline: none; touch-action: manipulation; }
+</style>
+</head>
+<body>
+<nav><a class="btn" href="/clean.html">Home</a><a class="btn" href="/falsepos.html">Notes</a></nav>
+<main>
+<h1>Known false positives</h1>
+<!-- A matrix meant to scroll, with its first column pinned: excepted from hidden-columns, as the standard allows. -->
+<div class="scroller" data-ui-floors-ignore="hidden-columns"><table><tbody>
+  <tr><td class="pin">Pinned name</td><td>Scrolled under the pinned column</td><td>More</td></tr>
+  <tr><td class="pin">Second</td><td>Also scrolled under it</td><td>More</td></tr>
+</tbody></table></div>
+<div class="clamp">This text is clamped to two lines on purpose, so the rest of it is hidden without a cue other than the clamp itself, and that is fine.</div>
+<div class="ellipsis">A label long enough to be cut with an ellipsis</div>
+<span class="sr-only">Screen reader only text, tiny and clipped</span>
+<div class="stack"><span>Text under a badge</span><span class="badge">Badge</span></div>
+<div>Visible line of text</div><div class="ghost">Hidden line of text</div>
+<div>Another visible line</div><div class="faded">Transparent line here</div>
+<div>Decorated line of text</div><div class="deco" aria-hidden="true">Decorative overlay</div>
+<p><button style="width:20px;height:20px;padding:0;margin:16px" aria-label="Close">×</button> A small target with space around it passes.</p>
+<nav aria-label="Breadcrumb"><span role="link" aria-disabled="true" aria-current="page">Current page</span></nav>
+<p>An inline <a href="/clean.html">link inside a sentence</a> is exempt from the target size on phones.</p>
+<table><thead><tr><th>ID</th><th>Date</th></tr></thead><tbody>
+  <tr><td>C-01</td><td>2026-11-02</td></tr><tr><td>SRC-0296</td><td>2026-11-03</td></tr><tr><td>O-01</td><td>2026-11-04</td></tr>
+</tbody></table>
+<svg width="320" height="120" role="img" aria-label="Rotated axis">
+  <text x="40" y="100" font-size="12" transform="rotate(-45 40 100)">Operator</text>
+  <text x="68" y="100" font-size="12" transform="rotate(-45 68 100)">Customer</text>
+  <text x="96" y="100" font-size="12" transform="rotate(-45 96 100)">Contractor or specialist</text>
+  <text x="200" y="40" font-size="12">Selling and</text>
+  <text x="200" y="54" font-size="12">relationships</text>
+</svg>
+<svg width="200" height="120" role="img" aria-label="Mixed angles">
+  <text x="20" y="100" font-size="12" transform="rotate(-45 20 100)">Operator name</text>
+  <text x="70" y="104" font-size="12">Total</text>
+</svg>
+<p><a class="stretch" href="/clean.html">Ring on a pseudo-element</a></p>
+<ul><li class="stretchli"><div><a href="/clean.html">Stretched link, ring on the row</a></div></li></ul>
+<p><a class="childring" href="/clean.html"><span>Ring on a child</span></a></p>
+<svg class="marks" width="200" height="64" role="group" aria-label="Chart marks">
+  <rect id="mark" x="6" y="6" width="48" height="48" fill="transparent" tabindex="0" role="button" aria-label="Mark"></rect>
+  <rect id="markfocus" x="2" y="2" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2" visibility="hidden"></rect>
+</svg>
+<script>
+document.querySelector(".scroller").scrollLeft = 120;
+const mark = document.getElementById("mark"), box = document.getElementById("markfocus");
+mark.addEventListener("focus", () => box.setAttribute("visibility", "visible"));
+mark.addEventListener("blur", () => box.setAttribute("visibility", "hidden"));
+</script>
+<!-- SVG text scaled up by its viewBox: 8 units drawn at 16 px. -->
+<svg width="200" height="40" viewBox="0 0 100 20"><text x="2" y="14" font-size="8">scaled up</text></svg>
+<!-- hidden-columns: a table whose columns all fit inside its scroll box on a phone. -->
+<div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Bank</th></tr></thead><tbody><tr><td>Operating</td><td>Harbor</td></tr></tbody></table></div>
+<!-- hidden-columns: a ledger that stacks its rows on phones, so nothing scrolls. -->
+<style>@media (max-width: 480px) { .stack, .stack tbody, .stack tr, .stack td { display: block; } .stack thead { display: none; } }</style>
+<div style="overflow-x:auto"><table class="stack" style="min-width:0"><thead><tr><th>Claim</th><th>Source</th><th>Reader</th><th>Stated by</th><th>Evidence label</th><th>Status</th></tr></thead>
+<tbody><tr><td>Demand is seasonal</td><td>Survey notes</td><td>Reader A</td><td>Founder</td><td>Claim</td><td>Open</td></tr></tbody></table></div>
+<!-- hidden-columns: a chart's table alternative, visually hidden for screen readers. -->
+<div class="sr-only"><table><thead><tr><th>Group</th><th>Primary</th><th>Vendor</th><th>Analyst</th></tr></thead><tbody><tr><td>A</td><td>1</td><td>2</td><td>3</td></tr></tbody></table></div>
+<!-- target-size: links in a visually hidden header row (a table stacked on a phone keeps it for screen readers). -->
+<style>
+.hidhead { display: block; } .hidhead tbody, .hidhead tr { display: block; }
+.hidhead thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.hidhead td { display: flex; justify-content: space-between; padding: 4px 0; }
+.hidhead th:first-child { min-width: 300px; }
+</style>
+<table class="hidhead"><thead><tr><th><a href="/clean.html">gpt-astra-6-offpath-v1</a></th><th><a href="/clean.html">opus-5-5-offpath-v1</a></th></tr></thead>
+<tbody><tr><td><span>2026-11-02-gpt-astra-6-seed-v2</span><span><a href="/clean.html">6</a></span></td></tr></tbody></table>
+<!-- target-size: a button scrolled out of view inside a scroll box isn't next to what lies past the box's edge. -->
+<div style="overflow:auto;height:40px"><p style="height:40px;margin:0">A long note.</p><button style="height:20px;width:70px;padding:0;border:0;font-size:13px">Read</button></div>
+<div><a href="/clean.html" style="display:inline-block;padding:3px 0">The next item, a link below the box</a></div>
+<!-- target-size, touch-action: a skip link that is itself visually hidden until focused; its padding gives the clipped box a size. -->
+<style>.skip { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 8px 12px; }</style>
+<a class="skip" href="#top">Skip to content</a><a class="skip" href="#top" style="top:30px">Skip again</a>
+</main>
+</body>
+</html>

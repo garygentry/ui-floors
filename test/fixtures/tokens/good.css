@@ -1,0 +1,24 @@
+/* A real app's tokens, Tailwind v4 shape. Passes. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Atkinson Hyperlegible Next Variable", ui-sans-serif, system-ui, sans-serif;
+}
+:root {
+  --background: oklch(0.982 0.004 250);
+  --card: oklch(1 0 0);
+  --foreground: oklch(0.24 0.03 258);
+  --muted: oklch(0.962 0.006 250);
+  --muted-foreground: oklch(0.42 0.03 257);
+  --primary: oklch(0.41 0.08 205);
+  --primary-foreground: oklch(0.985 0.004 250);
+}
+.dark {
+  --background: oklch(0.185 0.02 258);
+  --card: oklch(0.218 0.022 258);
+  --foreground: oklch(0.95 0.006 250);
+  --muted: oklch(0.245 0.022 258);
+  --muted-foreground: oklch(0.79 0.015 250);
+  --primary: oklch(0.8 0.08 205);
+  --primary-foreground: oklch(0.185 0.02 258);
+}

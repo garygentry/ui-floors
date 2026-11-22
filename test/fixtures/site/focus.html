@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Focus ring</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a">
+<link rel="stylesheet" href="/base.css">
+<style>.bare:focus-visible, [role=tabpanel]:focus-visible { outline: none; }</style>
+</head>
+<body>
+<nav><a class="btn" href="/clean.html">Home</a><a class="btn" href="/falsepos.html">Notes</a></nav>
+<main>
+<h1>Focus ring</h1>
+<button class="btn bare">No ring</button>
+<div role="tabpanel" tabindex="0">A tab panel that takes focus with no ring</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,15 @@
+/* Shared fixture styles: everything here passes every check. */
+:root { color-scheme: light dark; --bg: #f8fafc; --fg: #1e293b; --line: #cbd5e1; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f172a; --fg: #e2e8f0; --line: #334155; } }
+html { background: var(--bg); color: var(--fg); }
+body { margin: 0; font: 15px/1.55 sans-serif; }
+main { padding: 16px; }
+nav { display: flex; gap: 8px; padding: 8px 16px; }
+a, button, summary, select, [role=tab], input { touch-action: manipulation; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.btn { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; padding: 0 12px; box-sizing: border-box; }
+button { font: inherit; }
+p { max-width: 60ch; }
+table { border-collapse: collapse; }
+td, th { padding: 6px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
