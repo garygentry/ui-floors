@@ -32,6 +32,7 @@ describe("lint", () => {
       "break-all src/App.tsx:4",
       "break-all src/App.tsx:6",
       "break-all src/app.css:4",
+      "font-fallback src/app.css:10",
       "font-fallback src/app.css:5",
       "literal-colour src/App.tsx:3",
       "literal-colour src/App.tsx:5",
@@ -46,6 +47,11 @@ describe("lint", () => {
       "transition-all src/App.tsx:6",
       "transition-all src/app.css:3",
     ]);
+  });
+  test("font-fallback says when the generic family is quoted", () => {
+    const msgs = run("defects").findings.filter((f) => f.check === "font-fallback").map((f) => f.message);
+    expect(msgs[0]).toContain("has no generic fallback family");
+    expect(msgs[1]).toContain("the quoted 'monospace' names a font, not the generic family");
   });
   test("an ignore comment suppresses one line, and the finding is kept as ignored", () => {
     const ign = run("defects").findings.filter((f) => f.ignored);
