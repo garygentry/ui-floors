@@ -7,12 +7,13 @@ The rules come in two kinds (see [`STANDARD.md`](STANDARD.md)):
 - **Floors** always apply: contrast, smallest text, touch targets, horizontal scroll, overprinted or clipped text, focus rings, reduced motion. Most come from WCAG 2.2.
 - **Opinions** are defaults that teams differ on: body size, line length, number columns, tokens-only colour, dark theme, self-hosted fonts and more. They are warnings unless an app sets each one to `error` or `off`, so the same checks fit different house styles.
 
-It runs on Bun. The package ships TypeScript source, which Node won't run from `node_modules`.
+It runs on Bun 1.4 or later, not Node: the command's shebang is `bun`, and the package ships TypeScript source,
+which Node won't load from `node_modules`.
 
 ## Install
 
 ```sh
-bun add -d ui-floors playwright
+bun add -d @garygentry/ui-floors playwright
 bunx playwright install chromium
 ```
 

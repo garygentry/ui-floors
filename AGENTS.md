@@ -10,6 +10,7 @@ Checks that bring any web UI up to a sound baseline: `STANDARD.md` (the rules), 
 - **Nothing private.** This repo is public. Don't add names, paths or details of private projects, in files or commit messages.
 - **The plugin has one skill.** Procedures go under it; `test/plugin.test.ts` holds the plugin's version and paths to the package. Third-party skills are credited and called if installed, not bundled.
 - **Each check has a fixture** in `test/fixtures` that fails without it, and the clean and false-positive pages stay silent.
+- **Releases go through `release.yml`** from a `v*` tag, as `RELEASING.md` says. Never publish from a laptop or from `main`.
 - **Commit each piece of work.** Push, tag or publish only with the owner's approval.
 - Prose follows plain house style: short sentences, sentence case, no marketing language.
 

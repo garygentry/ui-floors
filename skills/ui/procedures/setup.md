@@ -17,7 +17,7 @@ Most mistakes are avoided here.
 
 ## 2. Committed or ad hoc
 
-- **Committed** (the default in a repo the user owns, or when they want the checks in CI): add `ui-floors` and, if the
+- **Committed** (the default in a repo the user owns, or when they want the checks in CI): add `@garygentry/ui-floors` and, if the
   app has none, `playwright` as dev dependencies, and put `ui-floors.json` at the app's root. If the app pins
   Playwright, keep its version; install Chromium with `./node_modules/.bin/playwright install chromium`.
 - **Ad hoc** (the repo shouldn't gain a dependency or a file, or the user only wants a pass): install outside the
@@ -26,7 +26,7 @@ Most mistakes are avoided here.
   ```sh
   mkdir -p <scratch>/ui-floors && cd <scratch>/ui-floors
   printf '{"private":true}\n' > package.json
-  bun add -d ui-floors playwright
+  bun add -d @garygentry/ui-floors playwright
   ./node_modules/.bin/playwright install chromium
   ./node_modules/.bin/ui-floors sweep --config <scratch>/ui-floors/ui-floors.json
   ```
