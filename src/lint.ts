@@ -72,7 +72,10 @@ export function collectFiles(opts: LintOptions, missing: string[] = []): File[] 
 
 const COLOR_FN = /\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/i;
 const HEX = /(^|[^\w&\/=])#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})\b/i;
-const GENERIC_FAMILY = /\b(serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-serif|ui-sans-serif|ui-monospace|ui-rounded|math|emoji|fangsong)\s*$/i;
+const GENERIC_NAMES = "serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-serif|ui-sans-serif|ui-monospace|ui-rounded|math|emoji|fangsong";
+const GENERIC_FAMILY = new RegExp(`\\b(${GENERIC_NAMES})\\s*$`, "i");
+// A quoted generic ('sans-serif') names a font called that, not the generic family.
+const QUOTED_GENERIC = new RegExp(`(["'])(${GENERIC_NAMES})\\1\\s*$`, "i");
 const FONT_HOSTS = /fonts\.googleapis\.com|fonts\.gstatic\.com|use\.typekit\.net|fonts\.bunny\.net|fonts\.cdnfonts\.com|cdn\.jsdelivr\.net\/.*font|unpkg\.com\/.*font/i;
 
 function suppressed(text: string, line: number, rule: string): boolean {
@@ -102,8 +105,13 @@ function lintCss(f: File, isTokenFile: boolean, emit: Emit) {
       emit("remote-font", f, d.line, "font loaded from another origin; self-host it");
     }
     const isFamily = (d.prop === "font-family" && !inFontFace) || /^--font-[\w-]+$/.test(d.prop);
-    if (isFamily && !/var\(|^(inherit|initial|unset|revert)$/.test(v) && !GENERIC_FAMILY.test(v)) {
-      emit("font-fallback", f, d.line, `\`${d.prop}: ${v}\` has no generic fallback family`);
+    if (isFamily && !/var\(|^(inherit|initial|unset|revert)$/.test(v)) {
+      const quoted = v.match(QUOTED_GENERIC);
+      if (quoted) {
+        emit("font-fallback", f, d.line, `\`${d.prop}: ${v}\`: the quoted ${quoted[0].trim()} names a font, not the generic family; remove the quotes`);
+      } else if (!GENERIC_FAMILY.test(v)) {
+        emit("font-fallback", f, d.line, `\`${d.prop}: ${v}\` has no generic fallback family`);
+      }
     }
   }
   const clean = stripComments(f.text);
@@ -129,9 +137,6 @@ function lintSource(f: File, stack: LintOptions["stack"], emit: Emit) {
         break;
       }
     }
-    if (f.kind === "html" && FONT_HOSTS.test(text) && /<link|@import/.test(text)) {
-      emit("remote-font", f, line, "font loaded from another origin; self-host it");
-    }
     if (stack === "react-tailwind" && f.kind === "source") {
       for (const s of strings) {
         if (/(^|[\s:])transition-all(\s|$)/.test(s)) emit("transition-all", f, line, "`transition-all`; name the properties (transition-colors, …)");
@@ -139,6 +144,21 @@ function lintSource(f: File, stack: LintOptions["stack"], emit: Emit) {
       }
     }
   });
+  if (f.kind === "html") lintHtmlFonts(f, emit);
+}
+
+// Whole tags, since a <link> often spans lines. A preconnect or dns-prefetch hint loads nothing.
+function lintHtmlFonts(f: File, emit: Emit) {
+  const text = f.text.replace(/<!--[\s\S]*?-->/g, (c) => c.replace(/[^\n]/g, " "));
+  for (const m of text.matchAll(/<link\b[^>]*>/gi)) {
+    const tag = m[0];
+    const href = /\bhref\s*=\s*["']?([^"'\s>]+)/i.exec(tag)?.[1];
+    if (!href || !FONT_HOSTS.test(href) || /\brel\s*=\s*["']?\s*(preconnect|dns-prefetch)\b/i.test(tag)) continue;
+    emit("remote-font", f, lineOf(text, m.index!), "font loaded from another origin; self-host it");
+  }
+  for (const m of text.matchAll(/@import\s+(?:url\()?\s*["']?(https?:[^"')\s]+)/gi)) {
+    if (FONT_HOSTS.test(m[1]!)) emit("remote-font", f, lineOf(text, m.index!), `font imported from ${m[1]}; self-host it`);
+  }
 }
 
 export function lint(opts: LintOptions): { findings: Finding[]; files: number } {

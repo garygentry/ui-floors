@@ -15,6 +15,11 @@ describe("contrast", () => {
     const fs = checkContrastText([{ path: "x.css", text: ":root{--paper:#fff} .dark{--paper:#000}" }]);
     expect(fs.map((f) => f.message)).toEqual(["no token pairs could be measured; set contrast.pairs"]);
   });
+  test("a token file outside the config's folder is named by its absolute path", () => {
+    const file = join(FIXTURES, "tokens", "low-dark.css");
+    const fs = checkContrast([file], undefined, join(FIXTURES, "lint"));
+    expect(fs[0]!.where).toBe(`${file}:11`);
+  });
   test("dark muted text under 4.5:1 is an error, light is fine", () => {
     const fs = run("low-dark");
     expect(fs).toHaveLength(1);

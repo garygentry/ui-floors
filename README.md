@@ -112,7 +112,7 @@ The sweep doesn't wait for `networkidle`, because a dev server with hot reload n
 | `transition-all` | opinion | lint | `transition: all`, or the Tailwind class `transition-all` |
 | `break-all` | opinion | lint | `word-break: break-all`, or the Tailwind class `break-all` |
 | `remote-font` | opinion | lint | A font loaded from another origin |
-| `font-fallback` | opinion | lint | A `font-family` or `--font-*` value with no generic family at the end |
+| `font-fallback` | opinion | lint | A `font-family` or `--font-*` value with no generic family at the end. A quoted generic (`'sans-serif'`) names a font, not the family, and the message says so |
 | `budget` | opinion | budget | First-render JS over `limitBytes` gzip: the entry's scripts and modulepreloads, plus their static imports. Lazy chunks don't count |
 
 ### Known false positives, excluded

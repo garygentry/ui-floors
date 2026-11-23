@@ -7,3 +7,4 @@ body { font-family: "Inter"; }
 @font-face { font-family: "Remote"; src: url("https://example.com/remote.woff2"); }
 .spin { animation: spin 1s linear infinite; }
 .quiet { color: #444444; } /* ui-floors-ignore literal-colour: fixture */
+code { font-family: "Mono", 'monospace'; }

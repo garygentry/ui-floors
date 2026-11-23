@@ -4,7 +4,7 @@
 // Dark inherits any token it doesn't redefine.
 
 import { readFileSync } from "node:fs";
-import { relative } from "node:path";
+import { relative, sep } from "node:path";
 import { parseCss } from "./css.ts";
 import { contrast, parseColor } from "./color.ts";
 import type { Pair } from "./config.ts";
@@ -79,7 +79,12 @@ function lookup(theme: Theme, name: string): string | null {
 }
 
 export function checkContrast(files: string[], pairs?: Pair[], cwd = process.cwd()): Finding[] & { checked?: number } {
-  const loaded = files.map((p) => ({ path: relative(cwd, p) || p, text: readFileSync(p, "utf8") }));
+  // Relative to the config's folder; a file outside it keeps its absolute path, as lint names it.
+  const shown = (p: string) => {
+    const r = relative(cwd, p);
+    return (r === "" || r.startsWith("..") ? p : r).split(sep).join("/");
+  };
+  const loaded = files.map((p) => ({ path: shown(p), text: readFileSync(p, "utf8") }));
   return checkContrastText(loaded, pairs);
 }
 
