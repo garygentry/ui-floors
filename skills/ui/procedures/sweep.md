@@ -39,6 +39,8 @@ screenshot paths and this list:
 - anything that differs between light and dark.
 
 Lazy or virtualised sections show blank in full-page captures. Scroll the real page before calling them defects.
+An app shell that scrolls inside a panel (`overflow: auto` under a fixed-height layout) shows only the panel's first
+screen. Check a page that ends at the window's bottom edge, and scroll the panel in the real page to read the rest.
 
 ## 4. Fix, re-shoot, confirm
 
