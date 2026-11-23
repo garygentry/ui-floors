@@ -5,6 +5,7 @@ The package and its standard share one version and follow semver. A rule and its
 ## Unreleased
 
 - `remote-font` reads whole `<link>` tags in HTML, so a tag split over several lines is caught, and a `preconnect` or `dns-prefetch` hint to a font host is no longer reported as a font load.
+- `contrast` names a token file outside the config's folder by its absolute path, as `lint` does, instead of a long `../` path.
 - `font-fallback` says when the stack ends in a quoted generic (`'sans-serif'`): the quotes make it a font name, not the generic family.
 - The sweep procedure warns that an app shell which scrolls inside a panel shows only the panel's first screen in a full-page capture.
 
