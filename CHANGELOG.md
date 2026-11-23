@@ -2,7 +2,7 @@
 
 The package and its standard share one version and follow semver. A rule and its check change in the same commit, with a line here.
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-11-23)
 
 First public release. Extracted from a private UI toolkit's checks package at 0.3.4, with fresh history.
 
