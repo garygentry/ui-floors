@@ -2,6 +2,10 @@
 
 The package and its standard share one version and follow semver. A rule and its check change in the same commit, with a line here.
 
+## Unreleased
+
+- `remote-font` reads whole `<link>` tags in HTML, so a tag split over several lines is caught, and a `preconnect` or `dns-prefetch` hint to a font host is no longer reported as a font load.
+
 ## 0.1.0 (2026-11-23)
 
 First public release. Extracted from a private UI toolkit's checks package at 0.3.4, with fresh history.

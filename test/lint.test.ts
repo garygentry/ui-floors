@@ -39,6 +39,7 @@ describe("lint", () => {
       "literal-colour src/app.css:2",
       "reduced-motion",
       "remote-font index.html:3",
+      "remote-font index.html:5",
       "remote-font src/app.css:6",
       "remote-font src/app.css:7",
       "transition-all src/App.tsx:3",

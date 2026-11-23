@@ -129,9 +129,6 @@ function lintSource(f: File, stack: LintOptions["stack"], emit: Emit) {
         break;
       }
     }
-    if (f.kind === "html" && FONT_HOSTS.test(text) && /<link|@import/.test(text)) {
-      emit("remote-font", f, line, "font loaded from another origin; self-host it");
-    }
     if (stack === "react-tailwind" && f.kind === "source") {
       for (const s of strings) {
         if (/(^|[\s:])transition-all(\s|$)/.test(s)) emit("transition-all", f, line, "`transition-all`; name the properties (transition-colors, …)");
@@ -139,6 +136,21 @@ function lintSource(f: File, stack: LintOptions["stack"], emit: Emit) {
       }
     }
   });
+  if (f.kind === "html") lintHtmlFonts(f, emit);
+}
+
+// Whole tags, since a <link> often spans lines. A preconnect or dns-prefetch hint loads nothing.
+function lintHtmlFonts(f: File, emit: Emit) {
+  const text = f.text.replace(/<!--[\s\S]*?-->/g, (c) => c.replace(/[^\n]/g, " "));
+  for (const m of text.matchAll(/<link\b[^>]*>/gi)) {
+    const tag = m[0];
+    const href = /\bhref\s*=\s*["']?([^"'\s>]+)/i.exec(tag)?.[1];
+    if (!href || !FONT_HOSTS.test(href) || /\brel\s*=\s*["']?\s*(preconnect|dns-prefetch)\b/i.test(tag)) continue;
+    emit("remote-font", f, lineOf(text, m.index!), "font loaded from another origin; self-host it");
+  }
+  for (const m of text.matchAll(/@import\s+(?:url\()?\s*["']?(https?:[^"')\s]+)/gi)) {
+    if (FONT_HOSTS.test(m[1]!)) emit("remote-font", f, lineOf(text, m.index!), `font imported from ${m[1]}; self-host it`);
+  }
 }
 
 export function lint(opts: LintOptions): { findings: Finding[]; files: number } {
