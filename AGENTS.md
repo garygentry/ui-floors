@@ -1,6 +1,6 @@
 # ui-floors
 
-Checks that bring any web UI up to a sound baseline: `STANDARD.md` (the rules), the checks package in `src/`, and a Claude Code plugin (`.claude-plugin/`, one skill in `skills/ui/`) whose procedures use them. Public, Apache-2.0.
+Checks that bring any web UI up to a sound baseline: `STANDARD.md` (the rules), the checks package in `src/`, and a plugin for Claude Code and GitHub Copilot (`.claude-plugin/`, which the Copilot CLI also reads; one skill in `skills/ui/`) whose procedures use them. Public, Apache-2.0.
 
 ## Rules
 

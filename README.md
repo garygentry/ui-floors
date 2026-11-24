@@ -19,16 +19,35 @@ bunx playwright install chromium
 
 Playwright is a peer dependency, so the app's own pinned Playwright and its Chromium are used. If an app pins Playwright, install Chromium with that version: `./node_modules/.bin/playwright install chromium`.
 
-## The Claude Code plugin
+## The agent plugin
 
-The repo is also a Claude Code plugin with one skill, `ui-floors:ui`. Its procedures set up the checks (committed, or
-ad hoc outside a repo you shouldn't change), run a baseline pass (fix every floor, report the opinions, read every
-screenshot, confirm each fix), run the sweep, and review a UI with a hand checklist. It doesn't include impeccable, a
-separate design critique skill; the review procedure uses it if you've installed it.
+The repo is also a plugin for Claude Code and GitHub Copilot, with one skill, `ui`. Its procedures set up the checks
+(committed, or ad hoc outside a repo you shouldn't change), run a baseline pass (fix every floor, report the opinions,
+read every screenshot, confirm each fix), run the sweep, and review a UI with a hand checklist. It doesn't include
+impeccable, a separate design critique skill; the review procedure uses it if you've installed it.
+
+The agent runs the checks itself, so the machine needs Bun 1.4 or later. The setup procedure installs the package and
+Chromium.
+
+**Claude Code.** The skill is `ui-floors:ui`.
 
 ```
-/plugin install ui-floors --marketplace garygentry/ui-floors
+/plugin marketplace add garygentry/ui-floors
+/plugin install ui-floors@ui-floors
 ```
+
+**GitHub Copilot CLI.** One plugin format serves both: the CLI reads `.claude-plugin/`. The skill is listed as `ui`.
+
+```sh
+copilot plugin marketplace add garygentry/ui-floors
+copilot plugin install ui-floors@ui-floors
+```
+
+**VS Code with Copilot.** Run **Chat: Install Plugin from Source** and give `https://github.com/garygentry/ui-floors`.
+VS Code also finds plugins the Copilot CLI has installed.
+
+**The Copilot cloud agent** isn't covered yet. Its docs don't mention plugins: it reads skills from the app's own repo
+(`.github/skills/`), and would need Bun and Chromium in `copilot-setup-steps.yml`.
 
 Then ask for what you want: "bring this UI up to a solid baseline", "sweep every page and fix what you find".
 

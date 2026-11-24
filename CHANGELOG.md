@@ -2,6 +2,12 @@
 
 The package and its standard share one version and follow semver. A rule and its check change in the same commit, with a line here.
 
+## Unreleased
+
+- The plugin works in GitHub Copilot as well as Claude Code. The Copilot CLI installs it from the same `.claude-plugin/` marketplace, and VS Code installs it from source. The README gives the steps for each, and corrects the Claude Code install command.
+- The skill reads Copilot's instruction files (`.github/copilot-instructions.md`, `.github/instructions/`) along with `AGENTS.md` and `CLAUDE.md`.
+- `test/plugin.test.ts` holds the skill's frontmatter to what both harnesses accept: the name matches its folder, within 64 characters, and the description is within 1024.
+
 ## 0.1.1 (2026-11-24)
 
 - `remote-font` reads whole `<link>` tags in HTML, so a tag split over several lines is caught, and a `preconnect` or `dns-prefetch` hint to a font host is no longer reported as a font load.
