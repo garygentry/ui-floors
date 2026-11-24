@@ -32,7 +32,8 @@ Baseline runs setup first if it's needed, then the sweep.
 ## Rules for every procedure
 
 - **Precedence:** the user's own words for the task, then the repo's rules, then the standard, then any tool's advice.
-  Read the repo's `CLAUDE.md`, `AGENTS.md`, contributing docs and any design file before acting.
+  Read the repo's agent instructions (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` and any
+  `.github/instructions/*.instructions.md`), contributing docs and any design file before acting.
 - **Floors are floors.** Fix every floor finding, or except it on the element with a reason. A floor's value may be
   raised, never lowered.
 - **Opinions are the repo's to choose.** Report them. Fix one only when the repo sets it to `error`, or the user asks.
