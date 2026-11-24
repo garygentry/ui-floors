@@ -7,7 +7,7 @@
       "name": "ui-floors",
       "source": ".",
       "description": "Bring any web UI up to a sound baseline: run the ui-floors checks, fix every floor, report the opinions, read every screenshot, and confirm each fix.",
-      "version": "0.1.0"
+      "version": "0.1.1"
     }
   ]
 }
