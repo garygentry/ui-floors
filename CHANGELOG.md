@@ -2,7 +2,7 @@
 
 The package and its standard share one version and follow semver. A rule and its check change in the same commit, with a line here.
 
-## Unreleased
+## 0.2.0 (2026-11-24)
 
 - The plugin works in GitHub Copilot as well as Claude Code. The Copilot CLI installs it from the same `.claude-plugin/` marketplace, and VS Code installs it from source. The README gives the steps for each, and corrects the Claude Code install command.
 - The skill reads Copilot's instruction files (`.github/copilot-instructions.md`, `.github/instructions/`) along with `AGENTS.md` and `CLAUDE.md`.
