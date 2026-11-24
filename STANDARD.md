@@ -1,6 +1,6 @@
 # The ui-floors standard
 
-Version 0.1.0, released with the package of the same version. It applies to web apps.
+Version 0.1.1, released with the package of the same version. It applies to web apps.
 
 Rules come in two kinds:
 

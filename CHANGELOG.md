@@ -2,7 +2,7 @@
 
 The package and its standard share one version and follow semver. A rule and its check change in the same commit, with a line here.
 
-## Unreleased
+## 0.1.1 (2026-11-24)
 
 - `remote-font` reads whole `<link>` tags in HTML, so a tag split over several lines is caught, and a `preconnect` or `dns-prefetch` hint to a font host is no longer reported as a font load.
 - `contrast` names a token file outside the config's folder by its absolute path, as `lint` does, instead of a long `../` path.
