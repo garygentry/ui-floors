@@ -1,6 +1,6 @@
 {
   "name": "@garygentry/ui-floors",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "module",
   "description": "Checks that bring any web UI up to a sound baseline: a screenshot sweep with layout checks, contrast, lint rules and a JS budget. Floors always hold; opinions are configurable.",
   "license": "Apache-2.0",
